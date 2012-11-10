@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cryptpe", "cryptpe\cryptpe.vcxproj", "{7FF57FC9-7BE1-4730-B9DA-BEBC5156DA33}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8EFA16CF-2CD4-4BEF-ABD4-2F7F234CD91D} = {8EFA16CF-2CD4-4BEF-ABD4-2F7F234CD91D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testbin", "testbin\testbin.vcxproj", "{B4192D03-4E38-4F45-B115-EAC8C9A98620}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mkbintable", "mkbintable\mkbintable.vcxproj", "{8EFA16CF-2CD4-4BEF-ABD4-2F7F234CD91D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B4192D03-4E38-4F45-B115-EAC8C9A98620} = {B4192D03-4E38-4F45-B115-EAC8C9A98620}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FF57FC9-7BE1-4730-B9DA-BEBC5156DA33}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7FF57FC9-7BE1-4730-B9DA-BEBC5156DA33}.Debug|Win32.Build.0 = Debug|Win32
+		{7FF57FC9-7BE1-4730-B9DA-BEBC5156DA33}.Release|Win32.ActiveCfg = Release|Win32
+		{7FF57FC9-7BE1-4730-B9DA-BEBC5156DA33}.Release|Win32.Build.0 = Release|Win32
+		{B4192D03-4E38-4F45-B115-EAC8C9A98620}.Debug|Win32.ActiveCfg = Release|Win32
+		{B4192D03-4E38-4F45-B115-EAC8C9A98620}.Debug|Win32.Build.0 = Release|Win32
+		{B4192D03-4E38-4F45-B115-EAC8C9A98620}.Release|Win32.ActiveCfg = Release|Win32
+		{B4192D03-4E38-4F45-B115-EAC8C9A98620}.Release|Win32.Build.0 = Release|Win32
+		{8EFA16CF-2CD4-4BEF-ABD4-2F7F234CD91D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8EFA16CF-2CD4-4BEF-ABD4-2F7F234CD91D}.Debug|Win32.Build.0 = Debug|Win32
+		{8EFA16CF-2CD4-4BEF-ABD4-2F7F234CD91D}.Release|Win32.ActiveCfg = Release|Win32
+		{8EFA16CF-2CD4-4BEF-ABD4-2F7F234CD91D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
