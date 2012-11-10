@@ -12,6 +12,6 @@
 #ifndef RC4_KEY_H_
 #define RC4_KEY_H_
 
-#define RC4_KEY		"_peter"
+#define RC4_KEY		1234
 
 #endif

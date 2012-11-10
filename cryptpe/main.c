@@ -21,6 +21,10 @@
 #include "..\shared\rc4.h"
 #include "..\shared\rc4_key.h"
 
+#if RC4_KEY == 1234
+#error Set the RC4 key in rc4_key.h first
+#endif
+
 //int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
 int main(int argc, char **argv) {
 	rc4_ctx_t rc4_ctx;

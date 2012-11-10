@@ -19,6 +19,10 @@
 
 #include "huffman_enc.h"
 
+#if RC4_KEY == 1234
+#error Set the RC4 key in rc4_key.h first
+#endif
+
 int main(int argc, char **argv) {
 	rc4_ctx_t rc4_ctx;
 	uchar rc4_buf[320], *file_buf, *enc_tree, *encoded;
