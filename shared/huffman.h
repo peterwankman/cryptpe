@@ -9,6 +9,8 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
+#include "types.h"
+
 #ifndef HUFFMAN_H_
 #define HUFFMAN_H_
 
