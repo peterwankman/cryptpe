@@ -83,10 +83,7 @@ int main(int argc, char **argv) {
 			printf(", ");
 	}
 	printf("\n};\n\n");
-	
-
 	printf("#endif\n");
-
 
 	free(codebook);
 	free(enc_tree);
