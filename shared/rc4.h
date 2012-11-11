@@ -12,6 +12,8 @@
 #ifndef RC4_H_
 #define RC4_H_
 
+#define RC4_KEY_SIZE	16
+
 #define rc4_drop(n, ctx)    rc4_gen(NULL, n, ctx)
 
 typedef struct {

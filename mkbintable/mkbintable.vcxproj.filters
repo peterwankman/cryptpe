@@ -32,9 +32,6 @@
     <ClInclude Include="..\shared\types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\shared\rc4_key.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="huffman_enc.h">
       <Filter>Header Files</Filter>
     </ClInclude>

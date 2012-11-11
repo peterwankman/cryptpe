@@ -19,7 +19,6 @@
   <ItemGroup>
     <ClInclude Include="..\shared\huffman.h" />
     <ClInclude Include="..\shared\rc4.h" />
-    <ClInclude Include="..\shared\rc4_key.h" />
     <ClInclude Include="..\shared\types.h" />
     <ClInclude Include="bintable.h" />
     <ClInclude Include="huffman_dec.h" />

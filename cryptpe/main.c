@@ -19,7 +19,6 @@
 #include "loader.h"
 #include "..\shared\types.h"
 #include "..\shared\rc4.h"
-#include "..\shared\rc4_key.h"
 
 int main(int argc, char **argv) {
 	rc4_ctx_t rc4_ctx;
@@ -27,7 +26,7 @@ int main(int argc, char **argv) {
 	int i;
 	hfm_node_t *root;
 
-	rc4_ctx = rc4_init((uchar*)RC4_KEY, strlen(RC4_KEY));
+	rc4_ctx = rc4_init(rc4_key, RC4_KEY_SIZE);
 	rc4_drop(3072, &rc4_ctx);
 
 	rc4_gen(rc4_buf, 320, &rc4_ctx);
