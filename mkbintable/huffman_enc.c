@@ -10,7 +10,6 @@
  */
 
 #include <stdlib.h>
-#include <string.h>
 
 #include "..\shared\types.h"
 #include "huffman_enc.h"
