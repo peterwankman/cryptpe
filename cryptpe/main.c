@@ -10,9 +10,6 @@
  */
 
 #include <Windows.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
 #include "bintable.h"
 #include "huffman_dec.h"
