@@ -197,7 +197,24 @@ static int BuildImportTable(PMEMORYMODULE module) {
 	return result;
 }
 
-HMEMORYMODULE load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+void MemoryFreeBinary(HMEMORYMODULE mod) {
+	int i;
+	PMEMORYMODULE module = (PMEMORYMODULE)mod;
+
+	if (module != NULL) {
+		if (module->modules != NULL) {
+			for (i=0; i<module->numModules; i++)
+				if (module->modules[i] != INVALID_HANDLE_VALUE)
+					FreeLibrary(module->modules[i]);
+			free(module->modules);
+		}
+		if (module->codeBase != NULL)
+			VirtualFree(module->codeBase, 0, MEM_RELEASE);
+		HeapFree(GetProcessHeap(), 0, module);
+	}
+}
+
+void *load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
 	PMEMORYMODULE result;
 	PIMAGE_DOS_HEADER dos_header;
 	PIMAGE_NT_HEADERS old_header;
@@ -268,9 +285,7 @@ HMEMORYMODULE load(const uchar *data, int argc, char **argv) { //HINSTANCE hInst
 		result->initialized = 1;
 	}
 
-	return (HMEMORYMODULE)result;
-
 error:
-//	MemoryFreeLibrary(result);
-	return NULL;
+	MemoryFreeBinary(result);
+	return (HMEMORYMODULE)result;
 }
