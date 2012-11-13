@@ -3,11 +3,10 @@ CryptPE -- An encryption tool for PE binaries
 How to use
 ----------
 
-Just running "Build solution" will first result in an error because
-the RC4-key is not set. Then it will create an example executable
+Just running "Build solution" will first create an example executable
 (testbin.exe) and encrypt it. This is probably not what you want.
 
-- Set RC4_KEY in rc4_key.h 
+To encrypt a binary of your choice:
 - Build mkbintable.exe
 - Run mkbintable on the desired binary to compress and encrypt it
 - Store the output in cryptpe\bintable.h

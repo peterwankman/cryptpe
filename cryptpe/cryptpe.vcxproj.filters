@@ -38,9 +38,6 @@
     <ClInclude Include="bintable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\shared\rc4_key.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\huffman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
