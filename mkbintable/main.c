@@ -12,15 +12,15 @@
 #include <stdio.h>
 #include <Windows.h>
 
+#include "huffman_enc.h"
+
 #include "..\shared\types.h"
 #include "..\shared\rc4.h"
-
-#include "huffman_enc.h"
 
 void getrandom(uchar *dst, int len) {
 	HCRYPTPROV provider;
 	
-	CryptAcquireContext(&provider, NULL, NULL, PROV_RSA_FULL, 0);
+	CryptAcquireContext(&provider, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT);
 	CryptGenRandom(provider, len, dst);
 	CryptReleaseContext(provider, 0);	
 }
