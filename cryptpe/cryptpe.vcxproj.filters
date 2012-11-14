@@ -13,11 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\shared">
+      <UniqueIdentifier>{6b4e50b1-4296-42a3-9dbf-8777698226ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\shared">
+      <UniqueIdentifier>{678a3b0f-488e-4b52-9ef9-6050da89a8ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\shared\rc4.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -27,18 +30,12 @@
     <ClCompile Include="loader.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\shared\rc4.c">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\shared\rc4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="bintable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\huffman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="huffman_dec.h">
@@ -46,6 +43,15 @@
     </ClInclude>
     <ClInclude Include="loader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\rc4.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\types.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\huffman.h">
+      <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
