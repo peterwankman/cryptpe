@@ -29,7 +29,7 @@ void printtable(char *name, uchar *bin, size_t len, rc4_ctx_t *ctx) {
 	size_t i;
 	uchar rc4_buf[320];
 
-	printf("uchar %s[] = {", name);
+	printf("static uchar %s[] = {", name);
 	for(i = 0; i < len; i++) {
 		if(!(i % 32))
 			printf("\n\t");
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
 	file_buf = malloc(file_size);
 	fseek(fp, 0, SEEK_SET);
 	fread(file_buf, file_size, 1, fp);
-	printf("size_t file_size = %d;\n\n", file_size);
+	printf("static size_t file_size = %d;\n\n", file_size);
 
 	getrandom(rc4_key, RC4_KEY_SIZE);
 	rc4_ctx = rc4_init(rc4_key, RC4_KEY_SIZE);

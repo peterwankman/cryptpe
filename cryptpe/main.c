@@ -20,16 +20,29 @@
 
 int main(int argc, char **argv) {
 	rc4_ctx_t rc4_ctx;
-	uchar rc4_buf[320], *decoded;
+	uchar rc4_buf[320], *decoded, num = 0;
 	int i;
 	hfm_node_t *root;
 
+#ifndef _DEBUG
+	__asm {
+		mov eax, fs:[30h]
+		mov eax, [eax+68h]
+		and eax, 0x70
+		test eax, eax
+		je NoDebugger
+
+	}
+	num = 0x5c;
+#endif
+
+NoDebugger:
 	rc4_ctx = rc4_init(rc4_key, RC4_KEY_SIZE);
 	rc4_drop(3072, &rc4_ctx);
 
 	rc4_gen(rc4_buf, 320, &rc4_ctx);
 	for(i = 0; i < sizeof(tree); i++)
-		tree[i] ^= rc4_buf[i];
+		tree[i] ^= rc4_buf[i] ^ num;
 	root = reconstruct_tree(tree);
 
 	for(i = 0; i < sizeof(binary); i++) {
