@@ -30,13 +30,12 @@ int main(int argc, char **argv) {
 		mov eax, [eax+68h]
 		and eax, 0x70
 		test eax, eax
-		je NoDebugger
-
+		je SkipAssign
 	}
 	num = 0x5c;
 #endif
 
-NoDebugger:
+SkipAssign:
 	rc4_ctx = rc4_init(rc4_key, RC4_KEY_SIZE);
 	rc4_drop(3072, &rc4_ctx);
 
