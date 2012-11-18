@@ -12,10 +12,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "..\shared\types.h"
 #include "huffman_enc.h"
 
-hfm_node_t *makenode(int weight, uchar c, hfm_node_t *left, hfm_node_t *right, hfm_node_t *parent) {
+#include "..\shared\types.h"
+
+static hfm_node_t *makenode(int weight, uchar c, hfm_node_t *left, hfm_node_t *right, hfm_node_t *parent) {
 	hfm_node_t *out = malloc(sizeof(hfm_node_t));
 	if(!out)
 		return NULL;
@@ -29,7 +30,7 @@ hfm_node_t *makenode(int weight, uchar c, hfm_node_t *left, hfm_node_t *right, h
 	return out;
 }
 
-void findlowest(hfm_node_t **tree, size_t size, int *node1, int *node2) {
+static void findlowest(hfm_node_t **tree, size_t size, int *node1, int *node2) {
 	uint idx1, idx2, i, buf;
 	
 	*node1 = *node2 = INT_MAX;
