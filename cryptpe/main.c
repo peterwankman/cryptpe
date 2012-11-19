@@ -26,6 +26,14 @@ int main(int argc, char **argv) {
 
 #ifndef _DEBUG
 	__asm {
+		mov eax, label
+		_emit 0xeb
+		_emit 0xff
+		_emit 0xe0
+		_emit 0x8d
+		_emit 0x85
+label:		
+
 		mov eax, fs:[30h]
 		mov eax, [eax+68h]
 		and eax, 0x70
