@@ -28,14 +28,16 @@ int main(int argc, char **argv) {
 	__asm {
 		mov eax, label
 		_emit 0xeb
-		_emit 0xff
-		_emit 0xe0
+		jmp eax
 		_emit 0x8d
-		_emit 0x85
-label:		
-
+		_emit 0xff
+label:
 		mov eax, fs:[30h]
 		mov eax, [eax+68h]
+		mov ebx, label2
+		_emit 0xeb
+		jmp ebx
+label2:
 		and eax, 0x70
 		test eax, eax
 		je SkipAssign
