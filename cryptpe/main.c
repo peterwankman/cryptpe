@@ -26,13 +26,27 @@ int main(int argc, char **argv) {
 
 #ifndef _DEBUG
 	__asm {
+		/*	Code to hide the debugger detector */
+		mov eax, label
+		_emit 0xeb		/* EB FF	JMP -1 The Disassembler should lose sync here. */
+		jmp eax			/* FF E0	Note the FF coming from the previous instruction. */
+		_emit 0x8d
+		_emit 0xff
+
+		/* Debugger detector, part I */
+label:
 		mov eax, fs:[30h]
 		mov eax, [eax+68h]
+
+		mov ebx, label2
+		_emit 0xeb		/* Same as above, ebx this time, because */
+		jmp ebx			/* we use eax to test for the debugger. */
+label2:
 		and eax, 0x70
 		test eax, eax
-		je SkipAssign
+		je SkipAssign	/* If there is no debugger present, skip */
 	}
-	num = 0x5c;
+	num = 0x5c;			/* xor the encoded tree with garbage */
 #endif
 
 SkipAssign:
