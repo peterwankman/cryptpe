@@ -53,5 +53,13 @@
     <ClInclude Include="..\shared\huffman.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
+    <ClInclude Include="debfuq.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="debfuq.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
 </Project>

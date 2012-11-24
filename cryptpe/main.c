@@ -12,6 +12,7 @@
 #include <Windows.h>
 
 #include "bintable.h"
+#include "debfuq.h"
 #include "huffman_dec.h"
 #include "loader.h"
 
@@ -20,36 +21,13 @@
 
 int main(int argc, char **argv) {
 	rc4_ctx_t rc4_ctx;
-	uchar rc4_buf[320], *decoded, num = 0;
+	uchar rc4_buf[320], *decoded, num = debfuq();
 	int i;
 	hfm_node_t *root;
 
-#ifndef _DEBUG
-	__asm {
-		/*	Code to hide the debugger detector */
-		mov eax, label
-		_emit 0xeb		/* EB FF	JMP -1 The Disassembler should lose sync here. */
-		jmp eax			/* FF E0	Note the FF coming from the previous instruction. */
-		_emit 0x8d
-		_emit 0xff
+	printf("Run level: %d\n", num);
+	system("pause");
 
-		/* Debugger detector, part I */
-label:
-		mov eax, fs:[30h]
-		mov eax, [eax+68h]
-
-		mov ebx, label2
-		_emit 0xeb		/* Same as above, ebx this time, because */
-		jmp ebx			/* we use eax to test for the debugger. */
-label2:
-		and eax, 0x70
-		test eax, eax
-		je SkipAssign	/* If there is no debugger present, skip */
-	}
-	num = 0x5c;			/* xor the encoded tree with garbage */
-#endif
-
-SkipAssign:
 	rc4_ctx = rc4_init(rc4_key, RC4_KEY_SIZE);
 	rc4_drop(3072, &rc4_ctx);
 
