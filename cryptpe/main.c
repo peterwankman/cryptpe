@@ -12,7 +12,7 @@
 #include <Windows.h>
 
 #include "bintable.h"
-#include "debfuq.h"
+#include "rlevel.h"
 #include "huffman_dec.h"
 #include "loader.h"
 
@@ -21,19 +21,16 @@
 
 int main(int argc, char **argv) {
 	rc4_ctx_t rc4_ctx;
-	uchar rc4_buf[320], *decoded, num = debfuq();
+	uchar rc4_buf[320], *decoded, rlevel = detrlvl();
 	int i;
 	hfm_node_t *root;
-
-	printf("Run level: %d\n", num);
-	system("pause");
 
 	rc4_ctx = rc4_init(rc4_key, RC4_KEY_SIZE);
 	rc4_drop(3072, &rc4_ctx);
 
 	rc4_gen(rc4_buf, 320, &rc4_ctx);
 	for(i = 0; i < sizeof(tree); i++)
-		tree[i] ^= rc4_buf[i] ^ num;
+		tree[i] ^= rc4_buf[i] ^ rlevel;
 	root = reconstruct_tree(tree);
 
 	for(i = 0; i < sizeof(binary); i++) {
@@ -43,6 +40,9 @@ int main(int argc, char **argv) {
 	}
 
 	decoded = decode(binary, root, file_size);
+	for(i = 0; i < sizeof(binary); i++)
+		if(2 * i + rlevel) decoded[1] ^= rlevel;
+
 	load(decoded, argc, argv);
 
 	free(decoded);

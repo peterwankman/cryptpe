@@ -21,7 +21,7 @@
     <ClInclude Include="..\shared\rc4.h" />
     <ClInclude Include="..\shared\types.h" />
     <ClInclude Include="bintable.h" />
-    <ClInclude Include="debfuq.h" />
+    <ClInclude Include="rlevel.h" />
     <ClInclude Include="huffman_dec.h" />
     <ClInclude Include="loader.h" />
   </ItemGroup>

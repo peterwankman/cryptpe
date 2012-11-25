@@ -53,7 +53,7 @@
     <ClInclude Include="..\shared\huffman.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="debfuq.h">
+    <ClInclude Include="rlevel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,7 +3,7 @@
 .model flat, c
 .code		
 assume fs:nothing
-debfuq PROC
+detrlvl PROC
 		mov eax, _label
 		db 0ebh			; EB FF	JMP -1 The Disassembler should lose sync here.
 		jmp eax			; FF E0	Note the FF coming from the previous instruction.
@@ -29,6 +29,6 @@ _xor:
 		xor ebx, 42h
 		mov eax, ebx
 		retn
-debfuq ENDP
+detrlvl ENDP
 
 end
