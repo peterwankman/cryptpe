@@ -214,22 +214,22 @@ void MemoryFreeBinary(HMEMORYMODULE mod) {
 	}
 }
 
-void *load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+int load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
 	PMEMORYMODULE result;
 	PIMAGE_DOS_HEADER dos_header;
 	PIMAGE_NT_HEADERS old_header;
 	uchar *code, *headers;
 	SIZE_T locationDelta;
 	EntryPoint Entry;
-	BOOL successfull;
+	int entryretval = EXIT_FAILURE;
 
 	dos_header = (PIMAGE_DOS_HEADER)data;
 	if (dos_header->e_magic != IMAGE_DOS_SIGNATURE)
-		return NULL;
+		return EXIT_FAILURE;
 
 	old_header = (PIMAGE_NT_HEADERS)&((const uchar*)(data))[dos_header->e_lfanew];
 	if (old_header->Signature != IMAGE_NT_SIGNATURE)
-		return NULL;
+		return EXIT_FAILURE;
 
 	code = (uchar*)VirtualAlloc((LPVOID)(old_header->OptionalHeader.ImageBase),
 		old_header->OptionalHeader.SizeOfImage,
@@ -242,12 +242,12 @@ void *load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HI
             MEM_RESERVE,
             PAGE_READWRITE);
 		if (code == NULL)
-			return NULL;		
+			return EXIT_FAILURE;
 	}
     
 	if((result = (PMEMORYMODULE)HeapAlloc(GetProcessHeap(), 0, sizeof(MEMORYMODULE))) == NULL) {
 		VirtualFree((LPVOID)((DWORD)code), old_header->OptionalHeader.SizeOfImage, MEM_DECOMMIT);
-		return NULL;
+		return EXIT_FAILURE;
 	}
 	
 	result->codeBase = code;
@@ -282,16 +282,11 @@ void *load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HI
 		if (!Entry)
 			goto error;
 
-		successfull = (*Entry)(argc, argv);
-		if (!successfull)
-			goto error;
-		
-		result->initialized = 1;
+		entryretval = (*Entry)(argc, argv);
 	}
 
 error:
-	VirtualFree((LPVOID)((DWORD)headers), old_header->OptionalHeader.SizeOfHeaders, MEM_DECOMMIT);
-	VirtualFree((LPVOID)((DWORD)code), old_header->OptionalHeader.SizeOfHeaders, MEM_DECOMMIT);
 	MemoryFreeBinary(result);
-	return (HMEMORYMODULE)result;
+
+	return entryretval;
 }

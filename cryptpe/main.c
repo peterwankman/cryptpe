@@ -24,6 +24,7 @@ int main(int argc, char **argv) {
 	uchar rc4_buf[320], *decoded, rlevel = detrlvl();
 	int i;
 	hfm_node_t *root;
+	int retval;
 
 	rc4_ctx = rc4_init(rc4_key, RC4_KEY_SIZE);
 	rc4_drop(3072, &rc4_ctx);
@@ -40,12 +41,13 @@ int main(int argc, char **argv) {
 	}
 
 	decoded = decode(binary, root, file_size);
+	free_tree(root);
+
 	for(i = 0; i < sizeof(binary); i++)
 		if(2 * i + rlevel) decoded[1] ^= rlevel;
 
-	load(decoded, argc, argv);
-
+	retval = load(decoded, argc, argv);
+	
 	free(decoded);
-	free_tree(root);
-	return EXIT_SUCCESS;
+	return retval;
 }
