@@ -1,9 +1,9 @@
-; Code to hide the debugger detector
 .386
 .model flat, c
 .code		
 assume fs:nothing
 detrlvl PROC
+; Code to hide the debugger detector
 		mov eax, _label
 		db 0ebh			; EB FF	JMP -1 The Disassembler should lose sync here.
 		jmp eax			; FF E0	Note the FF coming from the previous instruction.
