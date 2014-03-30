@@ -245,7 +245,11 @@ void *load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HI
 			return NULL;		
 	}
     
-	result = (PMEMORYMODULE)HeapAlloc(GetProcessHeap(), 0, sizeof(MEMORYMODULE));
+	if((result = (PMEMORYMODULE)HeapAlloc(GetProcessHeap(), 0, sizeof(MEMORYMODULE))) == NULL) {
+		VirtualFree((LPVOID)((DWORD)code), old_header->OptionalHeader.SizeOfImage, MEM_DECOMMIT);
+		return NULL;
+	}
+	
 	result->codeBase = code;
 	result->numModules = 0;
 	result->modules = NULL;
@@ -286,6 +290,8 @@ void *load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HI
 	}
 
 error:
+	VirtualFree((LPVOID)((DWORD)headers), old_header->OptionalHeader.SizeOfHeaders, MEM_DECOMMIT);
+	VirtualFree((LPVOID)((DWORD)code), old_header->OptionalHeader.SizeOfHeaders, MEM_DECOMMIT);
 	MemoryFreeBinary(result);
 	return (HMEMORYMODULE)result;
 }
