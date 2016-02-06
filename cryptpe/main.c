@@ -1,6 +1,6 @@
 /*
  * cryptpe -- Encryption tool for PE binaries
- * (C) 2012 Martin Wolters
+ * (C) 2012-2016 Martin Wolters
  *
  * This program is free software. It comes without any warranty, to
  * the extent permitted by applicable law. You can redistribute it
@@ -9,6 +9,7 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
+#include <stdint.h>
 #include <Windows.h>
 
 #include "bintable.h"
@@ -16,28 +17,28 @@
 #include "huffman_dec.h"
 #include "loader.h"
 
-#include "..\shared\types.h"
-#include "..\shared\rc4.h"
+#include "..\shared\salsa20.h"
 
 int main(int argc, char **argv) {
-	rc4_ctx_t rc4_ctx;
-	uchar rc4_buf[320], *decoded, rlevel = detrlvl();
+	salsa20_ctx_t salsa20_ctx;
+	uint8_t *salsa20_buf, *decoded, rlevel = detrlvl();
 	int i;
 	hfm_node_t *root;
 	int retval;
 
-	rc4_ctx = rc4_init(rc4_key, RC4_KEY_SIZE);
-	rc4_drop(3072, &rc4_ctx);
+	salsa20_ctx = salsa20_init(key, nonce, SALSA20_KEY_SIZE);
 
-	rc4_gen(rc4_buf, 320, &rc4_ctx);
-	for(i = 0; i < sizeof(tree); i++)
-		tree[i] ^= rc4_buf[i] ^ rlevel;
+	for(i = 0; i < sizeof(tree); i++) {
+		if(!(i % SALSA20_BLOCK_SIZE))
+			salsa20_buf = salsa20_gen_block(&salsa20_ctx);
+		tree[i] ^= salsa20_buf[i % SALSA20_BLOCK_SIZE] ^ rlevel;
+	}
 	root = reconstruct_tree(tree);
 
 	for(i = 0; i < sizeof(binary); i++) {
-		if(!(i % sizeof(rc4_buf)))
-			rc4_gen(rc4_buf, sizeof(rc4_buf), &rc4_ctx);
-		binary[i] ^= rc4_buf[i % sizeof(rc4_buf)];		
+		if(!(i % SALSA20_BLOCK_SIZE))
+			salsa20_buf = salsa20_gen_block(&salsa20_ctx);
+		binary[i] ^= salsa20_buf[i % SALSA20_BLOCK_SIZE];
 	}
 
 	decoded = decode(binary, root, file_size);

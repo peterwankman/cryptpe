@@ -9,9 +9,21 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
-#ifndef LOADER_H_
-#define LOADER_H_
+#ifndef SALSA20_H_
+#define SALSA20_H_
 
-int load(uint8_t *binary, int argc, char **argv);
+#define SALSA20_KEY_SIZE	32
+#define SALSA20_BLOCK_SIZE	64
+#define SALSA20_NONCE_SIZE	16
+
+typedef struct salsa20_ctx_t {
+	uint8_t state[64];
+	uint8_t key[32];
+	uint8_t nonce[16];
+	size_t ksize;
+} salsa20_ctx_t;
+
+salsa20_ctx_t salsa20_init(const uint8_t *key, const uint8_t *nonce, const size_t ksize);
+uint8_t *salsa20_gen_block(salsa20_ctx_t *ctx);
 
 #endif

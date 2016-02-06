@@ -1,6 +1,6 @@
 /*
  * testbin -- Example program for cryptpe
- * (C) 2012 Martin Wolters
+ * (C) 2012-2016 Martin Wolters
  *
  * This program is free software. It comes without any warranty, to
  * the extent permitted by applicable law. You can redistribute it

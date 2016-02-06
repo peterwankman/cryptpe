@@ -1,6 +1,6 @@
 /*
  * cryptpe -- Encryption tool for PE binaries
- * (C) 2012 Martin Wolters
+ * (C) 2012-2016 Martin Wolters
  *
  * This program is free software. It comes without any warranty, to
  * the extent permitted by applicable law. You can redistribute it
@@ -9,12 +9,12 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
+#include <stdint.h>
 #include <stdlib.h>
 
-#include "..\shared\types.h"
 #include "..\shared\huffman.h"
 
-static uchar get_bits(uchar *in, size_t *offs, size_t n) {
+static uint8_t get_bits(uint8_t *in, size_t *offs, size_t n) {
 	size_t byteoffs = (*offs) / 8;
 	size_t bitoffs = (*offs) & 7;
 
@@ -25,9 +25,9 @@ static uchar get_bits(uchar *in, size_t *offs, size_t n) {
 		return (in[byteoffs] << bitoffs) ^ (in[byteoffs + 1] >> (8 - bitoffs));
 }
 
-static hfm_node_t *reconstruct_node(uchar *in, size_t *offs) {
+static hfm_node_t *reconstruct_node(uint8_t *in, size_t *offs) {
 	hfm_node_t *out;
-	uchar bit = get_bits(in, offs, 1);
+	uint8_t bit = get_bits(in, offs, 1);
 
 	if((out = malloc(sizeof(hfm_node_t))) == NULL)
 		return NULL;
@@ -44,15 +44,15 @@ static hfm_node_t *reconstruct_node(uchar *in, size_t *offs) {
 	return out;
 }
 
-hfm_node_t *reconstruct_tree(uchar *in) {
+hfm_node_t *reconstruct_tree(uint8_t *in) {
 	size_t start = 0;
 	return reconstruct_node(in, &start);
 }
 
-uchar *decode(uchar *in, hfm_node_t *root, size_t len) {
+uint8_t *decode(uint8_t *in, hfm_node_t *root, size_t len) {
 	size_t nchar, pos;
 	hfm_node_t *node;
-	uchar *out;
+	uint8_t *out;
 
 	if((out = malloc(len)) == NULL)
 		return NULL;

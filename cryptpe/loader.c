@@ -29,7 +29,7 @@
 #include <Windows.h>
 #include <WinNT.h>
 
-#include "..\shared\types.h"
+#include <stdint.h>
 
 #ifndef IMAGE_SIZEOF_BASE_RELOCATION
 #define IMAGE_SIZEOF_BASE_RELOCATION (sizeof(IMAGE_BASE_RELOCATION))
@@ -39,7 +39,7 @@ typedef void *HMEMORYMODULE;
 
 typedef struct {
 	PIMAGE_NT_HEADERS headers;
-	uchar *codeBase;
+	uint8_t *codeBase;
 	HMODULE *modules;
 	int numModules;
 	int initialized;
@@ -49,17 +49,17 @@ typedef int (*EntryPoint)(int argc, char **argv);
 
 #define GET_HEADER_DICTIONARY(module, idx)	&(module)->headers->OptionalHeader.DataDirectory[idx]
 
-static void CopySections(const uchar *data, PIMAGE_NT_HEADERS old_headers, PMEMORYMODULE module) {
+static void CopySections(const uint8_t *data, PIMAGE_NT_HEADERS old_headers, PMEMORYMODULE module) {
 	int i, size;
-	uchar *codeBase = module->codeBase;
-	uchar *dest;
+	uint8_t *codeBase = module->codeBase;
+	uint8_t *dest;
 	PIMAGE_SECTION_HEADER section = IMAGE_FIRST_SECTION(module->headers);
 
 	for (i=0; i<module->headers->FileHeader.NumberOfSections; i++, section++) {
 		if (!(section->SizeOfRawData)) {
 			size = old_headers->OptionalHeader.SectionAlignment;
 			if (size) {
-				dest = (uchar*)VirtualAlloc(codeBase + section->VirtualAddress,
+				dest = (uint8_t*)VirtualAlloc(codeBase + section->VirtualAddress,
 					size,
 					MEM_COMMIT,
 					PAGE_READWRITE);
@@ -69,7 +69,7 @@ static void CopySections(const uchar *data, PIMAGE_NT_HEADERS old_headers, PMEMO
 			}
 			continue;
 		}
-		dest = (uchar*)VirtualAlloc(codeBase + section->VirtualAddress,
+		dest = (uint8_t*)VirtualAlloc(codeBase + section->VirtualAddress,
 			section->SizeOfRawData,	MEM_COMMIT, PAGE_READWRITE);
 		memcpy(dest, data + section->PointerToRawData, section->SizeOfRawData);
 		section->Misc.PhysicalAddress = (DWORD)dest;
@@ -123,17 +123,17 @@ FinalizeSections(PMEMORYMODULE module) {
 static void
 PerformBaseRelocation(PMEMORYMODULE module, SIZE_T delta) {
 	DWORD i;
-	uchar *codeBase = module->codeBase;
+	uint8_t *codeBase = module->codeBase;
 	PIMAGE_DATA_DIRECTORY directory = GET_HEADER_DICTIONARY(module, IMAGE_DIRECTORY_ENTRY_BASERELOC);
 	PIMAGE_BASE_RELOCATION relocation = (PIMAGE_BASE_RELOCATION) (codeBase + directory->VirtualAddress);
-	uchar *dest;
-	ushort *relInfo;
+	uint8_t *dest;
+	uint16_t *relInfo;
 	DWORD *patchAddrHL;
 	
 	if (directory->Size) {
 		for (; relocation->VirtualAddress; ) {
 			dest = codeBase + relocation->VirtualAddress;
-			relInfo = (ushort*)((uchar*)relocation + IMAGE_SIZEOF_BASE_RELOCATION);
+			relInfo = (uint16_t*)((uint8_t*)relocation + IMAGE_SIZEOF_BASE_RELOCATION);
 			for (i=0; i<((relocation->SizeOfBlock-IMAGE_SIZEOF_BASE_RELOCATION) / 2); i++, relInfo++) {
 				if (((*relInfo) >> 12) == IMAGE_REL_BASED_HIGHLOW) {					
 					patchAddrHL = (DWORD*) (dest + ((*relInfo) & 0xfff));
@@ -147,7 +147,7 @@ PerformBaseRelocation(PMEMORYMODULE module, SIZE_T delta) {
 
 static int BuildImportTable(PMEMORYMODULE module) {
 	int result=1;
-	uchar *codeBase = module->codeBase;
+	uint8_t *codeBase = module->codeBase;
 	PIMAGE_DATA_DIRECTORY directory = GET_HEADER_DICTIONARY(module, IMAGE_DIRECTORY_ENTRY_IMPORT);
 	PIMAGE_IMPORT_DESCRIPTOR importDesc = (PIMAGE_IMPORT_DESCRIPTOR) (codeBase + directory->VirtualAddress);
 	DWORD *thunkRef;
@@ -214,11 +214,11 @@ void MemoryFreeBinary(HMEMORYMODULE mod) {
 	}
 }
 
-int load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+int load(const uint8_t *data, int argc, char **argv) {
 	PMEMORYMODULE result;
 	PIMAGE_DOS_HEADER dos_header;
 	PIMAGE_NT_HEADERS old_header;
-	uchar *code, *headers;
+	uint8_t *code, *headers;
 	SIZE_T locationDelta;
 	EntryPoint Entry;
 	int entryretval = EXIT_FAILURE;
@@ -227,17 +227,17 @@ int load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HINS
 	if (dos_header->e_magic != IMAGE_DOS_SIGNATURE)
 		return EXIT_FAILURE;
 
-	old_header = (PIMAGE_NT_HEADERS)&((const uchar*)(data))[dos_header->e_lfanew];
+	old_header = (PIMAGE_NT_HEADERS)&((const uint8_t*)(data))[dos_header->e_lfanew];
 	if (old_header->Signature != IMAGE_NT_SIGNATURE)
 		return EXIT_FAILURE;
 
-	code = (uchar*)VirtualAlloc((LPVOID)(old_header->OptionalHeader.ImageBase),
+	code = (uint8_t*)VirtualAlloc((LPVOID)(old_header->OptionalHeader.ImageBase),
 		old_header->OptionalHeader.SizeOfImage,
 		MEM_RESERVE,
 		PAGE_READWRITE);
 
     if (code == NULL) {
-        code = (uchar*)VirtualAlloc(NULL,
+        code = (uint8_t*)VirtualAlloc(NULL,
             old_header->OptionalHeader.SizeOfImage,
             MEM_RESERVE,
             PAGE_READWRITE);
@@ -258,11 +258,11 @@ int load(const uchar *data, int argc, char **argv) { //HINSTANCE hInstance, HINS
 	VirtualAlloc(code, old_header->OptionalHeader.SizeOfImage,
 		MEM_COMMIT,	PAGE_READWRITE);
 
-	headers = (uchar*)VirtualAlloc(code, old_header->OptionalHeader.SizeOfHeaders,
+	headers = (uint8_t*)VirtualAlloc(code, old_header->OptionalHeader.SizeOfHeaders,
 		MEM_COMMIT,	PAGE_READWRITE);
 	
 	memcpy(headers, dos_header, dos_header->e_lfanew + old_header->OptionalHeader.SizeOfHeaders);
-	result->headers = (PIMAGE_NT_HEADERS)&((const uchar*)(headers))[dos_header->e_lfanew];
+	result->headers = (PIMAGE_NT_HEADERS)&((const uint8_t*)(headers))[dos_header->e_lfanew];
 
 	result->headers->OptionalHeader.ImageBase = (DWORD)code;
 

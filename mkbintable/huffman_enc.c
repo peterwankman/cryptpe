@@ -1,6 +1,6 @@
 /*
  * cryptpe -- Encryption tool for PE binaries
- * (C) 2012 Martin Wolters
+ * (C) 2012-2016 Martin Wolters
  *
  * This program is free software. It comes without any warranty, to
  * the extent permitted by applicable law. You can redistribute it
@@ -9,14 +9,13 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "huffman_enc.h"
 
-#include "..\shared\types.h"
-
-static hfm_node_t *makenode(int weight, uchar c, hfm_node_t *left, hfm_node_t *right, hfm_node_t *parent) {
+static hfm_node_t *makenode(int weight, uint8_t c, hfm_node_t *left, hfm_node_t *right, hfm_node_t *parent) {
 	hfm_node_t *out = malloc(sizeof(hfm_node_t));
 	if(!out)
 		return NULL;
@@ -31,7 +30,7 @@ static hfm_node_t *makenode(int weight, uchar c, hfm_node_t *left, hfm_node_t *r
 }
 
 static void findlowest(hfm_node_t **tree, size_t size, int *node1, int *node2) {
-	uint idx1, idx2, i, buf;
+	uint32_t idx1, idx2, i, buf;
 	
 	*node1 = *node2 = INT_MAX;
 
@@ -63,12 +62,12 @@ static void findlowest(hfm_node_t **tree, size_t size, int *node1, int *node2) {
 	*node2 = idx2;
 }
 
-hfm_node_t *maketree(uchar *in, size_t len) {
-	uint freq[256], i, j = 0;
+hfm_node_t *maketree(uint8_t *in, size_t len) {
+	uint32_t freq[256], i, j = 0;
 	int low1, low2;
 	hfm_node_t *tree[511];
 
-	memset(freq, 0, 256 * sizeof(uint));
+	memset(freq, 0, 256 * sizeof(uint32_t));
 
 	for(i = 0; i < len; i++)
 		freq[in[i]]++;
@@ -89,7 +88,7 @@ hfm_node_t *maketree(uchar *in, size_t len) {
 	return tree[j - 1];
 }
 
-static void add_bits(uchar *c, size_t nbits, uchar *str, size_t *size) {
+static void add_bits(uint8_t *c, size_t nbits, uint8_t *str, size_t *size) {
 	int outpos, outoffs, bit;
 	int inpos, inoffs = 0;
 	
@@ -105,8 +104,8 @@ static void add_bits(uchar *c, size_t nbits, uchar *str, size_t *size) {
 	} while(--nbits);	
 }
 
-static void encode_node(hfm_node_t *node, uchar *tree, size_t *size) {
-	uchar NIL = 0, ONE = 0x80;
+static void encode_node(hfm_node_t *node, uint8_t *tree, size_t *size) {
+	uint8_t NIL = 0, ONE = 0x80;
 	if(node->left == NULL) {
 		add_bits(&NIL, 1, tree, size);
 		add_bits(&(node->c), 8, tree, size);		
@@ -117,8 +116,8 @@ static void encode_node(hfm_node_t *node, uchar *tree, size_t *size) {
 	}
 }
 
-uchar *encode_tree(hfm_node_t *root, size_t *charsize) {
-	uchar *tree = malloc(320);
+uint8_t *encode_tree(hfm_node_t *root, size_t *charsize) {
+	uint8_t *tree = malloc(320);
 	size_t bitsize;
 
 	bitsize = (*charsize) = 0;
@@ -136,7 +135,7 @@ uchar *encode_tree(hfm_node_t *root, size_t *charsize) {
 
 static void walk_tree(hfm_node_t *node, hfm_cdb_t in, hfm_cdb_t *codebook) {
 	hfm_cdb_t left = in, right = in;
-	uchar NIL = 0, ONE = 0x80;
+	uint8_t NIL = 0, ONE = 0x80;
 
 	if(node->left == NULL) {		
 		codebook[node->c] = in;
@@ -162,9 +161,9 @@ hfm_cdb_t *make_codebook(hfm_node_t *root) {
 	return out;
 }
 
-uchar *encode(uchar *in, size_t insize, hfm_cdb_t *codebook, size_t *charsize) {
+uint8_t *encode(uint8_t *in, size_t insize, hfm_cdb_t *codebook, size_t *charsize) {
 	size_t i, bitsize = 0;
-	uchar *out;
+	uint8_t *out;
 	*charsize = 0;
 	
 	for(i = 0; i < insize; i++) 

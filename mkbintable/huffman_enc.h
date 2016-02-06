@@ -1,6 +1,6 @@
 /*
  * cryptpe -- Encryption tool for PE binaries
- * (C) 2012 Martin Wolters
+ * (C) 2012-2016 Martin Wolters
  *
  * This program is free software. It comes without any warranty, to
  * the extent permitted by applicable law. You can redistribute it
@@ -14,10 +14,10 @@
 
 #include "..\shared\huffman.h"
 
-hfm_node_t *maketree(uchar *in, size_t len);
-uchar *encode_tree(hfm_node_t *root, size_t *size);
+hfm_node_t *maketree(uint8_t *in, size_t len);
+uint8_t *encode_tree(hfm_node_t *root, size_t *size);
 hfm_cdb_t *make_codebook(hfm_node_t *root);
-uchar *encode(uchar *in, size_t insize, hfm_cdb_t *codebook, size_t *charsize);
+uint8_t *encode(uint8_t *in, size_t insize, hfm_cdb_t *codebook, size_t *charsize);
 void free_tree(hfm_node_t *node);
 
 #endif

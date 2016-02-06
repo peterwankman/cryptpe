@@ -27,7 +27,7 @@
     <ClCompile Include="huffman_enc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\shared\rc4.c">
+    <ClCompile Include="..\shared\salsa20.c">
       <Filter>Source Files\shared</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +38,7 @@
     <ClInclude Include="..\shared\huffman.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\shared\rc4.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\types.h">
+    <ClInclude Include="..\shared\salsa20.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>

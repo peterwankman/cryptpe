@@ -1,6 +1,6 @@
 /*
  * cryptpe -- Encryption tool for PE binaries
- * (C) 2012 Martin Wolters
+ * (C) 2012-2016 Martin Wolters
  *
  * This program is free software. It comes without any warranty, to
  * the extent permitted by applicable law. You can redistribute it
@@ -9,19 +9,19 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
-#include "types.h"
+#include <stdint.h>
 
 #ifndef HUFFMAN_H_
 #define HUFFMAN_H_
 
 typedef struct hfm_node_t {
 	int weight;
-	uchar c;
+	uint8_t c;
 	struct hfm_node_t *left, *right, *parent;
 } hfm_node_t;
 
 typedef struct {
-	uchar val[32];
+	uint8_t val[32];
 	size_t len;
 } hfm_cdb_t;
 

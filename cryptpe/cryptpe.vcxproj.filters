@@ -30,7 +30,7 @@
     <ClCompile Include="loader.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\shared\rc4.c">
+    <ClCompile Include="..\shared\salsa20.c">
       <Filter>Source Files\shared</Filter>
     </ClCompile>
   </ItemGroup>
@@ -43,12 +43,6 @@
     </ClInclude>
     <ClInclude Include="loader.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\rc4.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\types.h">
-      <Filter>Header Files\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\shared\huffman.h">
       <Filter>Header Files\shared</Filter>
