@@ -10,6 +10,7 @@
  */
 
 #include <stdint.h>
+#include <stdio.h>
 #include <Windows.h>
 
 #include "bintable.h"
@@ -17,7 +18,33 @@
 #include "huffman_dec.h"
 #include "loader.h"
 
+#include "MemoryModule.h"
+
 #include "..\shared\salsa20.h"
+
+typedef int (*MainProc_t)(int, char**);
+
+int callmain(const uint8_t *binary, const size_t bin_size, int argc, char **argv) {
+	HMEMORYMODULE Module;
+	MainProc_t MainProc;
+	int MainRet = EXIT_FAILURE;
+
+	if((Module = MemoryLoadLibrary(binary, bin_size)) == NULL) {
+		fprintf(stderr, "MemoryLoadLibrary() failed.\n");
+		return EXIT_FAILURE;
+	}
+
+	if((MainProc = (MainProc_t)MemoryGetProcAddress(Module, "main")) == NULL) {
+		fprintf(stderr, "MemoryGetProcAddress() couldn't fine main().\n");
+		goto fail;
+	}
+
+	MainRet = MainProc(argc, argv);
+
+fail:
+	MemoryFreeLibrary(Module);
+	return MainRet;
+}
 
 int main(int argc, char **argv) {
 	salsa20_ctx_t salsa20_ctx;
@@ -47,7 +74,7 @@ int main(int argc, char **argv) {
 	for(i = 0; i < sizeof(binary); i++)
 		if(2 * i + rlevel) decoded[1] ^= rlevel;
 
-	retval = load(decoded, argc, argv);
+	retval = callmain(decoded, file_size, argc, argv);
 	
 	free(decoded);
 	return retval;

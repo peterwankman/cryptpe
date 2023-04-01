@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 	uint8_t salsa20_nonce[SALSA20_NONCE_SIZE];
 
 	uint8_t *file_buf, *enc_tree, *encoded;
-	size_t pos = 0, file_size, tree_size;
+	size_t pos = 0, file_size, comp_size, tree_size;
 	hfm_node_t *root;
 	hfm_cdb_t *codebook;
 	FILE *fp;
@@ -86,8 +86,8 @@ int main(int argc, char **argv) {
 	printtable("tree", enc_tree, tree_size, &salsa20_ctx);
 
 	codebook = make_codebook(root);
-	encoded = encode(file_buf, file_size, codebook, &file_size);
-	printtable("binary", encoded, file_size, &salsa20_ctx);
+	encoded = encode(file_buf, file_size, codebook, &comp_size);
+	printtable("binary", encoded, comp_size, &salsa20_ctx);
 	printf("#endif\n");
 
 	free(codebook);

@@ -27,11 +27,11 @@
     <ClCompile Include="huffman_dec.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="loader.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\shared\salsa20.c">
       <Filter>Source Files\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryModule.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -41,13 +41,13 @@
     <ClInclude Include="huffman_dec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\huffman.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
     <ClInclude Include="rlevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

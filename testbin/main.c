@@ -11,6 +11,8 @@
 
 #include <stdio.h>
 
+/* We need to explicitly export main(), or MemoryModule won't find it. */
+__declspec(dllexport)
 int main(int argc, char **argv) {
 	int i;
 	
