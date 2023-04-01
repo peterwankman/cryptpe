@@ -16,7 +16,6 @@
 #include "bintable.h"
 #include "rlevel.h"
 #include "huffman_dec.h"
-#include "loader.h"
 
 #include "MemoryModule.h"
 
