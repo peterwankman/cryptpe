@@ -30,6 +30,7 @@ _label:								; Debugger detector proper, part I
 		mov rbx, _label2			; Same as above, rbx this time, because
 		db 0ebh						; we use eax to test for the debugger.
 		jmp rbx
+		db 8dh, 0ffh
 
 _label2:							; Debugger detector, part II
 		cmp rax, 70h				; Actual check.
@@ -53,8 +54,8 @@ assume fs:nothing
 
 detrlvl PROC
 		mov eax, _label
-		db 0ebh			
-		jmp eax			
+		db 0ebh
+		jmp eax
 		db 8dh, 0ffh
 
 _label:
@@ -62,8 +63,9 @@ _label:
 		mov eax, [eax+68h]
 
 		mov ebx, _label2
-		db 0ebh			
-		jmp ebx			
+		db 0ebh
+		jmp ebx
+		db 8dh, 0ffh
 
 _label2:
 		and eax, 70h
