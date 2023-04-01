@@ -13,7 +13,7 @@ echo %BINARY%
 
 echo Creating table...
 
-%BINARY% bin\Win32\Release\testbin.exe > cryptpe\bintable.h
+%BINARY% bin\%1\Release\testbin.exe > cryptpe\bintable.h
 popd
 echo done.
 
